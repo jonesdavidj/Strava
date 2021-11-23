@@ -5,10 +5,11 @@
    Saves them to a csv file called strava_efforts.csv
 """
 
-from strava_mod import getAccessToken, getMyStarredSegments, getMyEffortsForSegment
 import pandas as pd
 from pandas.io.json import json_normalize
+from strava_mod import getAccessToken, getMyStarredSegments, getMyEffortsForSegment
 import requests
+import os
 
 pageEff = 1
 
@@ -30,7 +31,12 @@ access_token = getAccessToken()
 
 # get my starred segments from Strava
 mySegments = getMyStarredSegments(access_token)
-mySegments.to_csv('strava_starredsegments.csv')
+try:
+    os.mkdir('outputs')
+except OSError as error:
+    print ('Warning Only:' + str(error))
+
+mySegments.to_csv('outputs/strava_starredsegments.csv')
 
 print ('Number of starred segments: ' + str(len(mySegments)))
 
@@ -46,4 +52,4 @@ for index, row in mySegments.iterrows():
         print ('something went wrong merging')
     print ('getting data for ' + str(row['name']))
 
-myEfforts.to_csv('strava_efforts.csv')
+myEfforts.to_csv('outputs/strava_efforts.csv')

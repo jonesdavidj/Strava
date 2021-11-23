@@ -9,6 +9,7 @@ from strava_mod import getAccessToken
 import requests
 import json
 import time
+import os
 
 # get the access token for accessing Strava from strava_mod
 access_token = getAccessToken()
@@ -87,4 +88,8 @@ while True:
     page += 1
 # Export your activities file as a csv
 # to the folder you're running this script in
-activities.to_csv('strava_activities.csv')
+try:
+    os.mkdir('outputs')
+except OSError as error:
+    print ('Warning Only:' + str(error))
+activities.to_csv('outputs/strava_activities.csv')
